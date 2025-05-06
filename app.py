@@ -22,21 +22,15 @@ worksheet = sheet.worksheet("TestSheet")
 @app.route("/log_weight", methods=["POST"])
 def log_weight():
     data = request.json
-    print("Received data:", data)  # Debug line
-
-    weight = data.get("weight")
-    if not weight:
-        return jsonify({"error": "Weight is required"}), 400
+    weight = data.get("weight", "").strip()
+    girth = data.get("girth", "").strip()
 
     date_str = datetime.now().strftime("%d/%m/%y")  # UK format
-    print("Appending to sheet:", date_str, weight)  # Debug line
 
-    try:
-        worksheet.append_row([date_str, weight])
-        return jsonify({"message": "Weight logged successfully!"})
-    except Exception as e:
-        print("Error appending to sheet:", e)  # Debug line
-        return jsonify({"error": str(e)}), 500
+    # Append all three columns: date, weight (or ""), girth (or "")
+    worksheet.append_row([date_str, weight, girth])
+
+    return jsonify({"message": "Weight and girth logged successfully!"})
 
 @app.route("/", methods=["GET"])
 def health_check():

@@ -1,31 +1,35 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Log Weight</title>
+  <title>Log Weight and Girth</title>
 </head>
 <body>
-  <h2>Enter Weight (KG)</h2>
-  <input type="number" id="weightInput" placeholder="e.g. 72.5">
+  <h2>Enter Weight and Girth</h2>
+  <input type="number" id="weightInput" placeholder="Weight (KG)">
+  <br><br>
+  <input type="number" id="girthInput" placeholder="Girth (CM)">
+  <br><br>
   <button onclick="submitWeight()">Submit</button>
   <p id="message"></p>
 
   <script>
     async function submitWeight() {
       const weight = document.getElementById("weightInput").value;
-      if (!weight) {
-        alert("Please enter your weight.");
-        return;
-      }
+      const girth = document.getElementById("girthInput").value;
 
       const response = await fetch("https://healthtracker-9vax.onrender.com/log_weight", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ weight: weight })
+        body: JSON.stringify({
+          weight: weight || "",  // send empty string if not entered
+          girth: girth || ""
+        })
       });
 
       const result = await response.json();
-      document.getElementById("message").innerText = result.message || "Error logging weight";
+      document.getElementById("message").innerText = result.message || "Error logging data";
       document.getElementById("weightInput").value = "";
+      document.getElementById("girthInput").value = "";
     }
   </script>
 </body>
