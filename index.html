@@ -1,14 +1,66 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Log Weight and Girth</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, sans-serif;
+      margin: 0;
+      padding: 2rem;
+      background: #f7f7f7;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      box-sizing: border-box;
+    }
+
+    h2 {
+      color: #333;
+    }
+
+    input {
+      width: 100%;
+      max-width: 300px;
+      padding: 0.75rem;
+      margin: 0.5rem 0;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      box-sizing: border-box;
+    }
+
+    button {
+      background-color: #007AFF;
+      color: white;
+      padding: 0.75rem 2rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 10px;
+      margin-top: 1rem;
+      cursor: pointer;
+      width: 100%;
+      max-width: 300px;
+    }
+
+    button:hover {
+      background-color: #005FCC;
+    }
+
+    #message {
+      margin-top: 1rem;
+      color: green;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
-  <h2>Enter Weight and Girth</h2>
+  <h2>Log Your Stats</h2>
+
   <input type="number" id="weightInput" placeholder="Weight (KG)">
-  <br><br>
   <input type="number" id="girthInput" placeholder="Girth (CM)">
-  <br><br>
   <button onclick="submitWeight()">Submit</button>
   <p id="message"></p>
 
@@ -21,7 +73,7 @@
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          weight: weight || "",  // send empty string if not entered
+          weight: weight || "",
           girth: girth || ""
         })
       });
