@@ -2,8 +2,6 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import gspread
 from datetime import datetime
-import os
-import json
 from google.oauth2.service_account import Credentials
 
 
