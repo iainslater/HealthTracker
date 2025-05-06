@@ -3,6 +3,11 @@ import gspread
 from google.oauth2.service_account import Credentials
 from datetime import datetime
 import os
+import json
+from google.oauth2.service_account import Credentials
+
+creds_info = json.loads(os.environ["GOOGLE_CREDENTIALS_JSON"])
+CREDS = Credentials.from_service_account_info(creds_info)
 
 app = Flask(__name__)
 
