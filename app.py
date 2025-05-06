@@ -15,8 +15,9 @@ CREDS = Credentials.from_service_account_file("service_account.json", scopes=SCO
 client = gspread.authorize(CREDS)
 
 # Replace with your actual Google Sheet ID
-SPREADSHEET_ID = "your-google-sheet-id"
-sheet = client.open_by_key(SPREADSHEET_ID).sheet1
+sheet_id = "133ANQxHIn9HAujVT6sEYhcEXSFYyBfLscDDl2Y0_ojM"
+sheet = client.open_by_key(sheet_id)
+worksheet = sheet.worksheet("TestSheet")
 
 @app.route("/log_weight", methods=["POST"])
 def log_weight():
@@ -27,7 +28,7 @@ def log_weight():
         return jsonify({"error": "Weight is required"}), 400
 
     date_str = datetime.now().strftime("%d/%m/%y")  # UK format
-    sheet.append_row([date_str, weight])
+    worksheet.append_row([date_str, weight])
 
     return jsonify({"message": "Weight logged successfully!"})
 
