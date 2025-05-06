@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 import gspread
 from datetime import datetime
 import os
@@ -8,6 +9,7 @@ from google.oauth2.service_account import Credentials
 
 
 app = Flask(__name__)
+CORS(app)  # Required to allow GitHub Pages to POST to this backend
 
 # Google Sheets setup
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
