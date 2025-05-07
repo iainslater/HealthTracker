@@ -142,15 +142,17 @@
       const result = await response.json();
       document.getElementById("message").innerText = result.message || "Error logging data";
 
-      // Optional: clear inputs
+      // Clear inputs
       document.getElementById("weightInput").value = "";
       document.getElementById("girthInput").value = "";
-      document.querySelector('input[name="mood"]:checked')?.checked = false;
+      selectedMood = null;
+      document.querySelectorAll('.emoji').forEach(e => e.classList.remove('selected'));
     }
 
     document.getElementById("modeToggle").addEventListener("change", function () {
       document.getElementById("modeLabel").innerText = this.checked ? "Live Mode" : "Test Mode";
     });
   </script>
+
 </body>
 </html>
