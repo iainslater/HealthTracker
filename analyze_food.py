@@ -6,7 +6,7 @@ from openai import OpenAI
 # Set your OpenAI API key
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY")) # poo
 
-
+#make a change
 def encode_image(image_path):
     with open(image_path, "rb") as image_file:
         return base64.b64encode(image_file.read()).decode('utf-8')
