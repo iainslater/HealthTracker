@@ -59,50 +59,56 @@
   </style>
 </head>
 <body>
-  <h2>Daily Log</h2>
-  <input type="number" id="weightInput" placeholder="Enter weight (kg)">
-  <input type="number" id="girthInput" placeholder="Enter girth (cm)">
+  <h2>Log Weight & Mood</h2>
+
+  <input type="number" id="weightInput" placeholder="Weight (KG)">
+  <input type="number" id="girthInput" placeholder="Girth (cm)">
 
   <div class="emoji-picker" id="moodPicker">
-    <button onclick="selectMood('😀')">😀</button>
-    <button onclick="selectMood('😐')">😐</button>
-    <button onclick="selectMood('😢')">😢</button>
+    <span class="emoji" data-value="1">😞</span>
+    <span class="emoji" data-value="2">😐</span>
+    <span class="emoji" data-value="3">🙂</span>
+    <span class="emoji" data-value="4">😊</span>
+    <span class="emoji" data-value="5">😁</span>
   </div>
 
-  <button onclick="submitEntry()">Submit</button>
+  <button onclick="submitData()">Submit</button>
   <p id="message"></p>
 
   <script>
-    let selectedMood = "";
+    let selectedMood = null;
 
-    function selectMood(mood) {
-      selectedMood = mood;
-      document.querySelectorAll('.emoji-picker button').forEach(btn => {
-        btn.classList.remove("selected");
-        if (btn.textContent === mood) btn.classList.add("selected");
+    // Handle emoji selection
+    document.querySelectorAll('.emoji').forEach(emoji => {
+      emoji.addEventListener('click', () => {
+        document.querySelectorAll('.emoji').forEach(e => e.classList.remove('selected'));
+        emoji.classList.add('selected');
+        selectedMood = parseInt(emoji.getAttribute('data-value'));
       });
-    }
+    });
 
-    async function submitEntry() {
+    async function submitData() {
       const weight = document.getElementById("weightInput").value;
       const girth = document.getElementById("girthInput").value;
+
+      const body = {
+        weight: weight || null,
+        girth: girth || null,
+        mood: selectedMood || null
+      };
 
       const response = await fetch("https://healthtracker-9vax.onrender.com/log_weight", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          weight: weight || "",
-          girth: girth || "",
-          mood: selectedMood || ""
-        })
+        body: JSON.stringify(body)
       });
 
       const result = await response.json();
       document.getElementById("message").innerText = result.message || "Error logging data";
       document.getElementById("weightInput").value = "";
       document.getElementById("girthInput").value = "";
-      selectedMood = "";
-      document.querySelectorAll('.emoji-picker button').forEach(btn => btn.classList.remove("selected"));
+      document.querySelectorAll('.emoji').forEach(e => e.classList.remove('selected'));
+      selectedMood = null;
     }
   </script>
 </body>
