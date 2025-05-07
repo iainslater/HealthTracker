@@ -4,7 +4,8 @@ from openai import OpenAI
 
 # Set your OpenAI API key
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-
+if not client.api_key:
+    raise ValueError("OPENAI_API_KEY not set in environment")
 
 def encode_image(image_path):
     with open(image_path, "rb") as image_file:
