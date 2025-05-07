@@ -30,6 +30,14 @@ def analyze_food():
     result = analyze_food_image(path)
     return jsonify({"result": result})
 
+@app.route("/analyze_food", methods=["POST"])
+def analyze_food():
+    image = request.files["image"]
+    path = "/tmp/uploaded_food.jpg"
+    image.save(path)
+    result = analyze_food_image(path)
+    return jsonify({"result": result})
+
 
 @app.route("/log_weight", methods=["POST"])
 def log_weight():
@@ -43,8 +51,8 @@ def log_weight():
 
     date_str = datetime.now().strftime("%d/%m/%y")  # UK format
 
-    # Append row: Date | Weight | Girth | Mood
-    worksheet.append_row([date_str, weight, girth, mood])
+    analysis = analyze_food_image(image_path)
+    worksheet.append_row([date_str, weight, girth, mood, analysis])
 
     return jsonify({"message": "Entry logged successfully!"})
 

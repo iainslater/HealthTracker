@@ -2,6 +2,7 @@ import base64
 import os
 from openai import OpenAI
 
+
 # Set your OpenAI API key
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY")) # poo
 
