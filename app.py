@@ -20,7 +20,7 @@ sheet_id = "133ANQxHIn9HAujVT6sEYhcEXSFYyBfLscDDl2Y0_ojM"
 sheet = client.open_by_key(sheet_id)
 # Get worksheets by name (or index)
 live_sheet = sheet.worksheet("Live")  # Change "Live" to match your real worksheet name
-test_sheet = sheet.worksheet("TestSheet")  # And your test worksheet name
+test_sheet = sheet.worksheet("TestSheet")  # And your test worksheet name poo
 
 @app.route("/analyze_food", methods=["POST"])
 def analyze_food():

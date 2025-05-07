@@ -3,7 +3,7 @@ import os
 from openai import OpenAI
 
 # Set your OpenAI API key
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY")) # poo
 
 
 def encode_image(image_path):
