@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import gspread
+import os
 from datetime import datetime
 from google.oauth2.service_account import Credentials
 from analyze_food import analyze_food_image  # Your working vision script
@@ -40,19 +41,19 @@ def log_weight():
     mood = data.get("mood", "")
     mode = data.get("mode", "live")  # default to live
 
+    analysis = None
 
-    # If a file was uploaded, save and analyze it
+    # Check if a photo was uploaded
     if "photo" in request.files:
         photo = request.files["photo"]
-        if photo.filename != "":
+        if photo and photo.filename != "":
             filename = secure_filename(photo.filename)
-            tmp_path = os.path.join("/tmp", filename)  # use /tmp for Render
+            tmp_path = os.path.join("/tmp", filename)  # Use /tmp on Render
             photo.save(tmp_path)
+
+            # Your custom image analysis function
             analysis = analyze_food_image(tmp_path)
-        else:
-            analysis = None
-    else:
-        analysis = None
+
 
     date_str = datetime.now().strftime("%d/%m/%y")  # UK format
 
