@@ -3,6 +3,7 @@ from flask_cors import CORS
 import gspread
 from datetime import datetime
 from google.oauth2.service_account import Credentials
+from analyze_food import analyze_food_image  # Your working vision script
 
 
 
@@ -20,6 +21,14 @@ sheet = client.open_by_key(sheet_id)
 # Get worksheets by name (or index)
 live_sheet = sheet.worksheet("Live")  # Change "Live" to match your real worksheet name
 test_sheet = sheet.worksheet("TestSheet")  # And your test worksheet name
+
+@app.route("/analyze_food", methods=["POST"])
+def analyze_food():
+    image = request.files["image"]
+    path = "/tmp/uploaded_food.jpg"
+    image.save(path)
+    result = analyze_food_image(path)
+    return jsonify({"result": result})
 
 
 @app.route("/log_weight", methods=["POST"])

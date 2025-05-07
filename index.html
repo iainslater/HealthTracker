@@ -132,7 +132,11 @@
     <span id="modeLabel">Test Mode</span>
   </div>
 
-  <button onclick="submitData()">Submit</button>
+  <input type="file" id="foodImage" accept="image/*">
+  <img id="preview" style="max-width: 100%; margin: 10px 0;" />
+
+
+  <button onclick="submitData(); analyzeFoodPhoto();">Submit</button>
   <p id="message"></p>
 
   <script>
@@ -146,6 +150,37 @@
         selectedMood = parseInt(emoji.getAttribute('data-value'));
       });
     });
+
+
+    //handle image previewing
+    document.getElementById("foodImage").addEventListener("change", function (event) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        document.getElementById("preview").src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+
+
+  //Analyse the food picture
+  async function analyzeFoodPhoto() {
+  const fileInput = document.getElementById("foodImage");
+  if (!fileInput.files.length) return;
+
+  const formData = new FormData();
+  formData.append("image", fileInput.files[0]);
+
+  const res = await fetch("https://your-app-url.onrender.com/analyze_food", {
+    method: "POST",
+    body: formData
+  });
+
+  const data = await res.json();
+  document.getElementById("message").innerText = data.result;
+}
 
     async function submitData() {
       const button = document.querySelector("button");
