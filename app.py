@@ -4,6 +4,7 @@ import gspread
 from datetime import datetime
 from google.oauth2.service_account import Credentials
 from analyze_food import analyze_food_image  # Your working vision script
+from werkzeug.utils import secure_filename
 
 #make a change
 
@@ -39,11 +40,24 @@ def log_weight():
     mood = data.get("mood", "")
     mode = data.get("mode", "live")  # default to live
 
-    worksheet = test_sheet if mode == "test" else live_sheet
+
+    # If a file was uploaded, save and analyze it
+    if "photo" in request.files:
+        photo = request.files["photo"]
+        if photo.filename != "":
+            filename = secure_filename(photo.filename)
+            tmp_path = os.path.join("/tmp", filename)  # use /tmp for Render
+            photo.save(tmp_path)
+            analysis = analyze_food_image(tmp_path)
+        else:
+            analysis = None
+    else:
+        analysis = None
 
     date_str = datetime.now().strftime("%d/%m/%y")  # UK format
 
-    analysis = analyze_food_image(image_path)
+    #get worksheet and append
+    worksheet = test_sheet if mode == "test" else live_sheet
     worksheet.append_row([date_str, weight, girth, mood, analysis])
 
     return jsonify({"message": "Entry logged successfully!"})

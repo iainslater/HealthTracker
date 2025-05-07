@@ -135,8 +135,8 @@
   <input type="file" id="foodImage" accept="image/*">
   <img id="preview" style="max-width: 100%; margin: 10px 0;" />
 
+  <button onclick="submitData()">Submit</button>
 
-  <button onclick="submitData(); analyzeFoodPhoto();">Submit</button>
   <p id="message"></p>
 
   <script>
@@ -165,18 +165,6 @@
   });
 
 
-  //Analyse the food picture
-  async function analyzeFoodPhoto() {
-  const fileInput = document.getElementById("foodImage");
-  if (!fileInput.files.length) return;
-
-  const formData = new FormData();
-  formData.append("image", fileInput.files[0]);
-
-  const res = await fetch("https://your-app-url.onrender.com/analyze_food", {
-    method: "POST",
-    body: formData
-  });
 
   const data = await res.json();
   document.getElementById("message").innerText = data.result;
@@ -192,11 +180,20 @@
       const girth = document.getElementById("girthInput").value;
       const mood = selectedMood || "";
       const mode = document.getElementById("modeToggle").checked ? "live" : "test";
+      const photo = document.getElementById("foodImage").files[0];
+
+      const formData = new FormData();
+      formData.append("weight", weight);
+      formData.append("girth", girth);
+      formData.append("mood", mood);
+      formData.append("mode", mode);
+      if (photo) {
+        formData.append("photo", photo);
+      }
 
       const response = await fetch("https://healthtracker-9vax.onrender.com/log_weight", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ weight, girth, mood, mode })
+        body: formData
       });
 
       const result = await response.json();
@@ -205,6 +202,8 @@
       // Clear inputs
       document.getElementById("weightInput").value = "";
       document.getElementById("girthInput").value = "";
+      document.getElementById("foodImage").value = "";
+      document.getElementById("preview").src = "";
       selectedMood = null;
       document.querySelectorAll('.emoji').forEach(e => e.classList.remove('selected'));
     }
