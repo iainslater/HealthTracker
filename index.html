@@ -1,94 +1,89 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-
-
-    <!-- Viewport and mobile capability -->
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="Weight Logger">
+  <title>Log Entry</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="icon.png">
   <link rel="apple-touch-icon" href="icon.png">
-
   <link rel="manifest" href="manifest.json">
-
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Log Weight and Girth</title>
   <style>
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    margin: 0;
-    padding: 2rem;
-    background: #f3e2dd;
-    color: #2a2a2a;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  h2 {
-    color: #2a2a2a;
-    margin-bottom: 1rem;
-  }
-
-  input[type="number"],
-  input[type="text"] {
-    padding: 0.75rem;
-    border: none;
-    border-radius: 12px;
-    background: #ffffff;
-    box-shadow: 0 0 6px rgba(0,0,0,0.05);
-    font-size: 1rem;
-    width: 100%;
-    max-width: 300px;
-    margin-bottom: 1rem;
-  }
-
-  button {
-    padding: 0.75rem 1.5rem;
-    background-color: #60c7c1;
-    color: white;
-    font-weight: bold;
-    border: none;
-    border-radius: 24px;
-    box-shadow: 0 4px 12px rgba(96, 199, 193, 0.3);
-    cursor: pointer;
-    transition: background 0.3s ease;
-  }
-
-  button:hover {
-    background-color: #4bb3ad;
-  }
-
-  #message {
-    margin-top: 1rem;
-    font-size: 1rem;
-    color: #555;
-  }
-
-  @media (max-width: 600px) {
     body {
-      padding: 1rem;
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: #f7f2ef;
+      color: #333;
     }
-
-    input,
+    h2 {
+      text-align: center;
+    }
+    input {
+      font-size: 1.2em;
+      padding: 8px;
+      margin-bottom: 12px;
+      width: 100%;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 12px;
+    }
+    .emoji-picker {
+      display: flex;
+      justify-content: space-around;
+      margin: 10px 0 20px;
+    }
+    .emoji-picker button {
+      font-size: 1.5em;
+      background: none;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .emoji-picker button.selected {
+      transform: scale(1.3);
+    }
     button {
       width: 100%;
+      padding: 12px;
+      font-size: 1.2em;
+      background: #00bfa6;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
     }
-  }
-</style>
+    #message {
+      margin-top: 20px;
+      text-align: center;
+      color: #008000;
+    }
+  </style>
 </head>
 <body>
-  <h2>Log Your Stats</h2>
+  <h2>Daily Log</h2>
+  <input type="number" id="weightInput" placeholder="Enter weight (kg)">
+  <input type="number" id="girthInput" placeholder="Enter girth (cm)">
 
-  <input type="number" id="weightInput" placeholder="Weight (KG)">
-  <input type="number" id="girthInput" placeholder="Girth (CM)">
-  <button onclick="submitWeight()">Submit</button>
+  <div class="emoji-picker" id="moodPicker">
+    <button onclick="selectMood('😀')">😀</button>
+    <button onclick="selectMood('😐')">😐</button>
+    <button onclick="selectMood('😢')">😢</button>
+  </div>
+
+  <button onclick="submitEntry()">Submit</button>
   <p id="message"></p>
 
   <script>
-    async function submitWeight() {
+    let selectedMood = "";
+
+    function selectMood(mood) {
+      selectedMood = mood;
+      document.querySelectorAll('.emoji-picker button').forEach(btn => {
+        btn.classList.remove("selected");
+        if (btn.textContent === mood) btn.classList.add("selected");
+      });
+    }
+
+    async function submitEntry() {
       const weight = document.getElementById("weightInput").value;
       const girth = document.getElementById("girthInput").value;
 
@@ -97,7 +92,8 @@
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           weight: weight || "",
-          girth: girth || ""
+          girth: girth || "",
+          mood: selectedMood || ""
         })
       });
 
@@ -105,6 +101,8 @@
       document.getElementById("message").innerText = result.message || "Error logging data";
       document.getElementById("weightInput").value = "";
       document.getElementById("girthInput").value = "";
+      selectedMood = "";
+      document.querySelectorAll('.emoji-picker button').forEach(btn => btn.classList.remove("selected"));
     }
   </script>
 </body>

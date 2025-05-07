@@ -22,15 +22,16 @@ worksheet = sheet.worksheet("TestSheet")
 @app.route("/log_weight", methods=["POST"])
 def log_weight():
     data = request.json
-    weight = data.get("weight", "").strip()
-    girth = data.get("girth", "").strip()
+    weight = data.get("weight", "")
+    girth = data.get("girth", "")
+    mood = data.get("mood", "")
 
     date_str = datetime.now().strftime("%d/%m/%y")  # UK format
 
-    # Append all three columns: date, weight (or ""), girth (or "")
-    worksheet.append_row([date_str, weight, girth])
+    # Append row: Date | Weight | Girth | Mood
+    worksheet.append_row([date_str, weight, girth, mood])
 
-    return jsonify({"message": "Weight and girth logged successfully!"})
+    return jsonify({"message": "Entry logged successfully!"})
 
 @app.route("/", methods=["GET"])
 def health_check():
