@@ -1,8 +1,9 @@
 import base64
+import os
 from openai import OpenAI
 
 # Set your OpenAI API key
-client = OpenAI(api_key="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")
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 
 def encode_image(image_path):
