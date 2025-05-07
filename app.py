@@ -38,6 +38,14 @@ def analyze_food():
     result = analyze_food_image(path)
     return jsonify({"result": result})
 
+@app.route("/analyze_food", methods=["POST"])
+def analyze_food():
+    image = request.files["image"]
+    path = "/tmp/uploaded_food.jpg"
+    image.save(path)
+    result = analyze_food_image(path)
+    return jsonify({"result": result})
+
 
 @app.route("/log_weight", methods=["POST"])
 def log_weight():
