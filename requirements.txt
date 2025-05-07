@@ -4,4 +4,4 @@ gspread
 google-auth
 gunicorn
 openai
-werkzeug.utils
+werkzeug
