@@ -17,7 +17,10 @@ client = gspread.authorize(CREDS)
 # Replace with your actual Google Sheet ID
 sheet_id = "133ANQxHIn9HAujVT6sEYhcEXSFYyBfLscDDl2Y0_ojM"
 sheet = client.open_by_key(sheet_id)
-worksheet = sheet.worksheet("TestSheet")
+# Get worksheets by name (or index)
+live_sheet = sheet.worksheet("Live")  # Change "Live" to match your real worksheet name
+test_sheet = sheet.worksheet("TestSheet")  # And your test worksheet name
+
 
 @app.route("/log_weight", methods=["POST"])
 def log_weight():
@@ -25,6 +28,9 @@ def log_weight():
     weight = data.get("weight", "")
     girth = data.get("girth", "")
     mood = data.get("mood", "")
+    mode = data.get("mode", "live")  # default to live
+
+    worksheet = test_sheet if mode == "test" else live_sheet
 
     date_str = datetime.now().strftime("%d/%m/%y")  # UK format
 

@@ -61,6 +61,14 @@
     <span class="emoji" data-value="5">😁</span>
   </div>
 
+  <div style="margin-bottom: 15px;">
+  <label for="modeToggle">Mode:</label>
+  <select id="modeToggle">
+    <option value="live">Live</option>
+    <option value="test">Test</option>
+  </select>
+  </div>
+
   <button onclick="submitData()">Submit</button>
   <p id="message"></p>
 
@@ -80,11 +88,14 @@
       const weight = document.getElementById("weightInput").value;
       const girth = document.getElementById("girthInput").value;
 
-      const body = {
-        weight: weight || null,
-        girth: girth || null,
-        mood: selectedMood || null
-      };
+      const mode = document.getElementById("modeToggle").value;
+
+    const body = {
+      weight: weight || null,
+      girth: girth || null,
+      mood: selectedMood || null,
+      mode: mode
+    };
 
       const response = await fetch("https://healthtracker-9vax.onrender.com/log_weight", {
         method: "POST",
